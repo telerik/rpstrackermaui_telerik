@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             xmlns:telerik="http://schemas.telerik.com/2022/xaml/maui"
+             xmlns:converters="clr-namespace:RPS.UI.Converters"
+             x:Class="RPS.UI.Views.Backlog.ItemsView">
+
+    <ContentView.Resources>
+        <converters:AvatarConverter x:Key="AvatarConv" />
+        <converters:FullNameConverter x:Key="FullNameConv" />
+        <converters:ItemTypeImageConverter x:Key="ItemTypeImageConv" />
+        <converters:PriorityColorConverter x:Key="PriorityColorConv" />
+    </ContentView.Resources>
+
+    <Grid x:Name="RootLayout">
+        <!-- starting table
+        <CollectionView Grid.Row="1"
+                    SelectionMode="Single"
+                    ItemsSource="{Binding MyItems}"
+                    SelectionChanged="OnCollectionViewSelectionChanged"
+                    >
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <ContentView>
+                        <Label Padding="5" Text="{Binding Title}"/>
+                    </ContentView>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+         -->
+
+        <telerik:RadDataGrid 
+            RowHeight="50"
+            ItemsSource="{Binding MyItems}"
+            AutoGenerateColumns="False"
+            SelectionMode="Single"
+            SelectionUnit="Row"
+            SelectionChanged="OnDataGridSelectionChanged">
+
+            <telerik:RadDataGrid.Columns>
+                
+                <telerik:DataGridTemplateColumn>
+                    <telerik:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <Image Source="{Binding Type, Converter={StaticResource ItemTypeImageConv}}"
+                               WidthRequest="20"
+                               HeightRequest="20"/>
+                        </DataTemplate>
+                    </telerik:DataGridTemplateColumn.CellContentTemplate>
+                </telerik:DataGridTemplateColumn>
+
+                <telerik:DataGridTextColumn HeaderText="Title" PropertyName="Title">
+                </telerik:DataGridTextColumn>
+
+                <telerik:DataGridTemplateColumn HeaderText="Assignee">
+                    <telerik:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <HorizontalStackLayout Spacing="4" Margin="4">
+                                <telerik:RadBorder BorderThickness="2"
+                                   CornerRadius="15">
+                                    <Image Source="{Binding Assignee, Converter={StaticResource AvatarConv}}"
+                                        WidthRequest="30" HeightRequest="30"/>
+                                </telerik:RadBorder>
+                                <Label Text="{Binding Assignee, Converter={StaticResource FullNameConv}}"
+                                    VerticalOptions="Center"/>
+                            </HorizontalStackLayout>
+                        </DataTemplate>
+                    </telerik:DataGridTemplateColumn.CellContentTemplate>
+                </telerik:DataGridTemplateColumn>
+
+                <telerik:DataGridTemplateColumn HeaderText="Priority">
+                    <telerik:DataGridTemplateColumn.CellContentTemplate>
+                        <DataTemplate>
+                            <Label 
+                                Text="{Binding Priority}" 
+                                TextTransform="Uppercase" 
+                                HorizontalTextAlignment="Center" 
+                                VerticalTextAlignment="Center" 
+                                BackgroundColor="{Binding Priority, FallbackValue=Green, Converter={StaticResource PriorityColorConv}}" 
+                                TextColor="White"
+                                FontSize="9" 
+                                FontAttributes="Bold"/>
+                        </DataTemplate>
+                    </telerik:DataGridTemplateColumn.CellContentTemplate>
+                </telerik:DataGridTemplateColumn>
+
+                <telerik:DataGridNumericalColumn HeaderText="Estimate" PropertyName="Estimate" />
+
+                <telerik:DataGridDateColumn HeaderText="Created" PropertyName="DateCreated" />
+            </telerik:RadDataGrid.Columns>
+        </telerik:RadDataGrid>
+
+    </Grid>
+</ContentView>
